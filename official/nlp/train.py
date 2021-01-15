@@ -19,6 +19,8 @@ from absl import app
 from absl import flags
 import gin
 
+import tensorflow as tf
+
 from official.common import distribute_utils
 # pylint: disable=unused-import
 from official.common import registry_imports
@@ -56,6 +58,10 @@ def main(_):
       **params.runtime.model_parallelism())
   with distribution_strategy.scope():
     task = task_factory.get_task(params.task, logging_dir=model_dir)
+  
+  print('**************************************')
+  tf.profiler.experimental.server.start(6009)
+  print('**************************************')
 
   train_lib.run_experiment(
       distribution_strategy=distribution_strategy,
